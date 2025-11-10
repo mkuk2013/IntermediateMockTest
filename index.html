@@ -321,15 +321,17 @@
         /* Delay classes are applied via JS to ensure they only start when visible */
     </style>
 </head>
-<body class="min-h-screen flex flex-col" data-theme="light">
+<body data-theme="light"> 
 
     <!-- Theme Toggle -->
+    <!-- Note: The Theme Toggle remains fixed for easy access -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
         <i class="fas fa-moon" id="themeIcon"></i>
     </button>
 
-    <!-- Header and Important Notice Section -->
-    <header class="header-bg text-white shadow-xl">
+    <!-- Header (Sticky/Fixed) -->
+    <!-- Retained fixed, top-0, w-full, z-50 for sticky header -->
+    <header class="header-bg text-white shadow-xl fixed top-0 w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center relative z-10">
             <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl pb-2 animate-fade-in delay-0">
                BPS 5-15 Intermediate Category Mock Test Preparation
@@ -340,7 +342,9 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Main Content Area -->
+    <!-- Retained pt-[230px] (header height + margin) and removed pb-[140px] (footer is no longer fixed) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[230px] py-10 min-h-screen">
         
         <!-- IMPORTANT NOTICE -->
         <div class="notice-box p-6 sm:p-8 rounded-xl mb-12 animate-fade-in" data-delay="200">
@@ -464,9 +468,10 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white mt-auto py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <!-- Footer (Standard/Scrollable) -->
+    <!-- Removed fixed, bottom-0, w-full, z-50 so it scrolls with content -->
+    <footer class="bg-gray-900 text-white mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-8"> 
             
             <p class="text-gray-400 text-sm mb-4">
                 © 2025 IBA STS Mock Test Platform. All rights reserved.
