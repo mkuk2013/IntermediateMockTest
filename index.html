@@ -25,7 +25,7 @@
             /* New Past Paper Color: VIOLET */
             --past-paper-bg: #8b5cf6;   /* Violet 500 */
             --past-paper-dark: #6d28d9; /* Violet 700 */
-            
+
             /* Gradients */
             --header-gradient: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             --card-border-gradient: linear-gradient(90deg, var(--success-color), var(--primary-blue));
@@ -41,6 +41,9 @@
 
             /* New: Light Mode Text Fix */
             --text-high-contrast: rgba(0, 0, 0, 0.85);
+
+            /* New Danger Color for Badge */
+            --danger-color: #F56565; /* Red */
         }
 
         [data-theme="dark"] {
@@ -59,6 +62,9 @@
 
             /* New: Dark Mode Text Fix uses default light variable */
             --text-high-contrast: var(--text-color-light); 
+
+            /* New Danger Color for Badge (Dark) */
+            --danger-color: #FC8181; /* Lighter Red */
         }
 
         /* --- Base Styles --- */
@@ -67,6 +73,10 @@
             background-color: var(--bg-primary-light);
             color: var(--text-color-light);
             transition: background-color var(--transition), color var(--transition);
+            /* Adding a subtle background pattern for professionalism */
+            background-image: radial-gradient(var(--text-muted-light) 0.5px, transparent 0.5px);
+            background-size: 15px 15px;
+            background-attachment: fixed;
         }
         .header-bg {
             background: var(--header-gradient);
@@ -78,35 +88,39 @@
             justify-content: center;
         }
 
-        /* --- Header Animated Dots --- */
+        /* --- Header Wave Pattern --- */
         .header-bg::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.08) 3px, transparent 3px);
-            background-size: 120px 120px, 90px 90px, 150px 150px;
-            animation: float 25s ease-in-out infinite;
+            left: 0;
+            width: 100%;
+            height: 100px; /* Height of the wave */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-size: cover;
+            opacity: 0.5; /* Subtle */
             pointer-events: none;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(1deg); }
-            66% { transform: translateY(-10px) rotate(-1deg); }
         }
         
         .text-primary {
             color: var(--primary-blue);
         }
+
+        /* --- NEW: Gradient Animation --- */
+        @keyframes gradient-pan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .bg-secondary-btn {
             background: linear-gradient(45deg, var(--success-color) 0%, #34d399 100%);
             transition: all var(--transition);
             box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            background-size: 200% auto; /* For animation */
+            animation: gradient-pan 5s linear infinite; /* Animated gradient */
         }
         .bg-secondary-btn:hover {
             opacity: 0.9;
@@ -119,6 +133,8 @@
             background: var(--past-paper-gradient);
             transition: all var(--transition);
             box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+            background-size: 200% auto; /* For animation */
+            animation: gradient-pan 5s linear infinite; /* Animated gradient */
         }
         .bg-past-paper-btn:hover {
             opacity: 0.9;
@@ -145,13 +161,21 @@
 
         /* --- Custom Components (Notice Box) --- */
         .notice-box {
-            background-color: var(--card-bg-light);
+            /* Glassmorphism Effect */
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            /* --- */
             border-left: 5px solid var(--accent-color); /* Amber Accent */
             box-shadow: var(--shadow-pro);
             transition: all var(--transition);
             color: var(--text-color-light);
         }
         [data-theme="dark"] .notice-box {
+             /* Dark Glassmorphism */
+             background-color: rgba(30, 41, 59, 0.6);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             /* --- */
              border-left-color: var(--accent-color);
         }
         /* FIX: High contrast text for notice box content in Light Mode */
@@ -161,7 +185,11 @@
 
         /* --- Custom Components (Cards) --- */
         .card-pro {
-            background-color: var(--card-bg-light);
+            /* Glassmorphism Effect */
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            /* --- */
             border-radius: 16px;
             padding: 24px;
             text-align: center;
@@ -169,13 +197,12 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(100, 116, 139, 0.1);
             /* Initial transform for fade-in */
             opacity: 0;
             transform: translateY(20px);
         }
         .card-pro:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px) scale(1.03); /* Updated hover effect */
             box-shadow: var(--shadow-pro);
         }
         .card-pro::before {
@@ -190,6 +217,9 @@
             transform: scaleX(0);
             transform-origin: left;
             z-index: 10;
+            /* Animated Gradient */
+            background-size: 200% auto;
+            animation: gradient-pan 5s linear infinite;
         }
         .card-pro:hover::before {
             transform: scaleX(1);
@@ -197,7 +227,16 @@
         /* Past Paper Card Hover Border */
         .past-paper-card.card-pro::before {
             background: var(--past-paper-gradient);
+            background-size: 200% auto; /* For animation */
+            animation: gradient-pan 5s linear infinite; /* Animated gradient */
         }
+        
+        [data-theme="dark"] .card-pro {
+             /* Dark Glassmorphism */
+             background-color: rgba(30, 41, 59, 0.6);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
 
         /* --- NEW: Disabled Card Style --- */
         .disabled-card {
@@ -215,24 +254,59 @@
         .disabled-card .disabled-btn {
              background: #6b7280 !important; /* Gray background for disabled button */
              box-shadow: none !important;
+             animation: none !important; /* Stop gradient animation on disabled */
         }
 
 
         /* Card Icon Coloring */
-        .card-icon-primary {
+        .card-icon-primary, .card-icon-secondary {
             font-size: 3rem;
+            transition: transform var(--transition); /* Added transition for hover effect */
+        }
+        .card-pro:hover .card-icon-primary,
+        .card-pro:hover .card-icon-secondary {
+            transform: scale(1.1); /* Icon scales on card hover */
+        }
+
+        .card-icon-primary {
             background: linear-gradient(45deg, var(--primary-blue), var(--secondary-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .card-icon-secondary {
-            font-size: 3rem;
             /* Use new violet color for better look */
             background: var(--past-paper-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+
+        /* --- NEW: Badge Style --- */
+        .badge-new {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--danger-color); /* Use existing danger color */
+            color: white;
+            font-size: 0.75rem; /* 12px */
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 9999px; /* pill shape */
+            text-transform: uppercase;
+            animation: pulse-badge 1.5s infinite;
+            z-index: 11;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 8px rgba(245, 101, 101, 0);
+            }
         }
 
         /* --- FIX: Card Title Text Color for Light Mode (Ensuring high contrast) --- */
@@ -263,18 +337,23 @@
             height: 4px;
             background: var(--card-border-gradient);
             border-radius: 2px;
+            /* Animated Gradient */
+            background-size: 200% auto;
+            animation: gradient-pan 5s linear infinite;
         }
         /* Past Paper Section Title Underline (Violet) */
         .past-paper-title::after {
             background: var(--past-paper-gradient);
+            background-size: 200% auto; /* For animation */
+            animation: gradient-pan 5s linear infinite; /* Animated gradient */
         }
 
-        /* Dark Mode Toggle Position */
+        /* Dark Mode Toggle Position - MODIFIED */
         .theme-toggle {
-            position: fixed;
+            position: absolute; /* Changed from fixed */
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            /* z-index: 1000; */ /* No longer needed on top of everything */
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(0, 0, 0, 0.1);
@@ -284,18 +363,27 @@
             transition: all var(--transition);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             font-weight: 600;
-            color: var(--text-color-light);
+            color: var(--text-color-light); /* Will be dark in light mode */
         }
         [data-theme="dark"] .theme-toggle {
             background: rgba(45, 55, 72, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color-light); /* Will be light in dark mode */
+        }
+        /* Need to adjust text color for light mode specifically */
+        [data-theme="light"] .theme-toggle {
             color: var(--text-color-light);
         }
+
         .theme-toggle:hover {
             transform: scale(1.05);
         }
 
         /* --- Footer Styles --- */
+        /* Footer background updated to header gradient */
+        .footer-bg {
+            background: var(--header-gradient);
+        }
         .footer-social-link {
             transition: transform var(--transition);
         }
@@ -324,15 +412,18 @@
 <body data-theme="light"> 
 
     <!-- Theme Toggle -->
-    <!-- Note: The Theme Toggle remains fixed for easy access -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <i class="fas fa-moon" id="themeIcon"></i>
-    </button>
-
+    <!-- Note: The Theme Toggle is now inside the header -->
+    
     <!-- Header (Sticky/Fixed) -->
-    <!-- Retained fixed, top-0, w-full, z-50 for sticky header -->
-    <header class="header-bg text-white shadow-xl fixed top-0 w-full z-50">
+    <!-- MODIFIED: Removed mb-12 -->
+    <header class="header-bg text-white shadow-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center relative z-10">
+            
+            <!-- Theme Toggle Button (MOVED HERE) -->
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+
             <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl pb-2 animate-fade-in delay-0">
                BPS 5-15 Intermediate Category Mock Test Preparation
             </h1>
@@ -343,8 +434,8 @@
     </header>
 
     <!-- Main Content Area -->
-    <!-- Retained pt-[230px] (header height + margin) and removed pb-[140px] (footer is no longer fixed) -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[230px] py-10 min-h-screen">
+    <!-- MODIFIED: Changed py-10 to py-16 for better spacing -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 min-h-screen">
         
         <!-- IMPORTANT NOTICE -->
         <div class="notice-box p-6 sm:p-8 rounded-xl mb-12 animate-fade-in" data-delay="200">
@@ -369,6 +460,9 @@
             </h2>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 mock-test-grid lg:grid-cols-5 gap-6">
+                
+                <!-- Sample Paper Card YAHAN SE HATA DIYA GAYA HAI -->
+
                 <!-- Generate 10 Mock Test Cards (Dynamically inserted via JS) -->
                 <script>
                     const mockTests = [];
@@ -426,6 +520,21 @@
             </h2>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 past-paper-grid lg:grid-cols-5 gap-6">
+                
+                <!-- NEW CARD: Official Sample Paper (YAHAN PASTE KIYA GAYA HAI) -->
+                <a href="sample-paper.html" class="card-pro past-paper-card animate-fade-in" style="animation-delay: 0.5s;">
+                    <span class="badge-new">New</span>
+                    <!-- Icon class 'card-icon-secondary' (violet) kar di gayi hai -->
+                    <div class="mb-4 card-icon-secondary"> 
+                        <i class="fas fa-file-signature"></i> 
+                    </div>
+                    <h3 class="text-xl font-semibold mb-6 card-title-text">Official Sample Paper</h3>
+                    <!-- Button class 'bg-past-paper-btn' (violet) kar di gayi hai -->
+                    <span class="w-full inline-block bg-past-paper-btn text-white font-bold py-3 px-4 rounded-lg shadow-lg uppercase text-sm hover:translate-y-0 transition-transform"> 
+                        Start Now
+                    </span>
+                </a>
+
                 <!-- Generate 5 Past Paper Cards (Dynamically inserted via JS) -->
                 <script>
                     const pastPapers = [];
@@ -445,7 +554,8 @@
                         // Link is always '#' and card is always disabled
                         card.href = "#"; 
                         card.className = `card-pro past-paper-card animate-fade-in disabled-card`; // Added disabled-card class
-                        card.style.animationDelay = `${(index * 0.1) + 0.6}s`;
+                        // Animation delay 0.6s se shuru hoga (sample paper ke baad)
+                        card.style.animationDelay = `${(index * 0.1) + 0.6}s`; 
                         
                         // Button classes for disabled state
                         const buttonClasses = `w-full inline-block disabled-btn text-white font-bold py-3 px-4 rounded-lg shadow-md uppercase text-sm transition-colors`;
@@ -469,15 +579,15 @@
     </main>
 
     <!-- Footer (Standard/Scrollable) -->
-    <!-- Removed fixed, bottom-0, w-full, z-50 so it scrolls with content -->
-    <footer class="bg-gray-900 text-white mt-auto">
+    <!-- MODIFIED: Added 'footer-bg' class to apply gradient -->
+    <footer class="footer-bg text-white mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-8"> 
             
-            <p class="text-gray-400 text-sm mb-4">
+            <p class="text-gray-200 text-sm mb-4"> <!-- Adjusted text color for gradient */ -->
                 © 2025 IBA STS Mock Test Platform. All rights reserved.
             </p>
 
-            <p class="text-gray-300 text-base font-semibold mb-6">
+            <p class="text-gray-100 text-base font-semibold mb-6"> <!-- Adjusted text color for gradient */ -->
                 Connect with us on social media for updates and educational support
             </p>
             
