@@ -470,7 +470,9 @@
                         mockTests.push({
                             title: `Mock Test ${i}`,
                             link: `mock-test${i}.html`,
-                            isEnabled: i === 1 // Only Mock Test 1 is enabled
+                            // --- CHANGE ---
+                            // Mock Test 1 aur 2 ab enabled hain
+                            isEnabled: i === 1 || i === 2 
                         });
                     }
 
