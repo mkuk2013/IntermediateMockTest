@@ -823,62 +823,6 @@
             observer.observe(el);
         });
     </script>
-    <!-- Netlify Hidden Backend Form -->
-    <!-- ACTION NOTE: Changed method to 'GET' for local testing to avoid 405 error. 
-         Change back to method="POST" when deploying to Netlify! -->
-    <form name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-        <input type="text" name="page" />
-        <textarea name="message"></textarea>
-    </form>
-    <!-- Feedback Popup -->
-    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-11/12 max-w-md">
-
-            <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">Give Your Feedback</h2>
-
-            <button onclick="closePopup()"
-                class="absolute top-3 right-4 text-xl font-bold text-gray-700 dark:text-gray-200">
-                ×
-            </button>
-
-            <!-- ACTION NOTE: Changed method to 'GET' for local testing to avoid 405 error. 
-                 Change back to method="POST" when deploying to Netlify! -->
-            <form name="feedback" method="GET" data-netlify="true" class="space-y-4">
-                <input type="hidden" name="page" id="pageName">
-
-                <div>
-                    <label class="block text-gray-600 dark:text-gray-300 mb-1">Your Feedback</label>
-                    <textarea name="message" required
-                        class="w-full p-3 rounded-lg border dark:bg-gray-700 dark:text-gray-100"></textarea>
-                </div>
-
-                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
-                    Submit
-                </button>
-            </form>
-            <script>
-                // Open Popup
-                function openPopup() {
-                    document.getElementById("popup").classList.remove("hidden");
-                }
-
-                // Close Popup
-                function closePopup() {
-                    document.getElementById("popup").classList.add("hidden");
-                }
-
-                // Auto-fill current page name
-                document.addEventListener("DOMContentLoaded", () => {
-                    document.getElementById("pageName").value = "Home Page (index.html)";
-                });
-
-                // Auto popup delay (optional)
-                setTimeout(openPopup, 10000); // 10 sec after page load
-            </script>
-
-        </div>
-    </div>
-
 </body>
 
 </html>
