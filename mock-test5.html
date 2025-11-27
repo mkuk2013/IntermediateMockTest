@@ -449,13 +449,13 @@
         .option.selected::before {
             background-color: white;
             border-color: white;
-            box-shadow: 0 0 0 4px var(--primary-color);
+            box-shadow: inset 0 0 0 4px var(--primary-color);
         }
         body.dark-mode .option.selected {
             color: var(--card-bg);
         }
         body.dark-mode .option.selected::before {
-            box-shadow: 0 0 0 4px var(--primary-color);
+            box-shadow: inset 0 0 0 4px var(--primary-color);
         }
 
         .test-footer {
@@ -2724,12 +2724,15 @@ const quizData = [
 
         function updatePalette() {
             questionPalette.innerHTML = '';
+            let activeBtn = null; // To store the current question button
+
             quizData.forEach((_, index) => {
                 const paletteBtn = document.createElement('button');
                 paletteBtn.classList.add('palette-btn');
                 paletteBtn.textContent = index + 1;
                 if (index === currentQuestionIndex) {
                     paletteBtn.classList.add('current');
+                    activeBtn = paletteBtn; // Capture reference
                 }
                 if (userAnswers[index] !== null) {
                     paletteBtn.classList.add('answered');
@@ -2745,6 +2748,15 @@ const quizData = [
                 });
                 questionPalette.appendChild(paletteBtn);
             });
+
+            // Scroll the palette to keep the current question button in view
+            if (activeBtn) {
+                activeBtn.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
         }
 
         function startTimer() {
