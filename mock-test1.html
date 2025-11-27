@@ -8,6 +8,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- MathJax for mathematical formulas (Corrected position) -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        console.log('MathJax 3 is loaded and ready.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
     <style>
         /* --- Base Variables & Reset --- */
         :root {
@@ -421,16 +445,17 @@
             border-color: var(--primary-color);
             box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
+        /* UPDATED: Filled radio button effect */
         .option.selected::before {
             background-color: white;
             border-color: white;
-            box-shadow: 0 0 0 4px var(--primary-color);
+            box-shadow: inset 0 0 0 4px var(--primary-color);
         }
         body.dark-mode .option.selected {
             color: var(--card-bg);
         }
         body.dark-mode .option.selected::before {
-            box-shadow: 0 0 0 4px var(--primary-color);
+            box-shadow: inset 0 0 0 4px var(--primary-color);
         }
 
         .test-footer {
@@ -660,8 +685,9 @@
             font-size: 1.3em;
             color: var(--primary-color);
         }
-        .score-details div:nth-child(3) p:last-child { color: var(--secondary-color); } /* Correct */
-        .score-details div:nth-child(4) p:last-child { color: var(--danger-color); } /* Incorrect */
+        /* CSS selectors ko naye 'Status' box ke liye update kiya gaya hai */
+        .score-details div:nth-child(4) p:last-child { color: var(--secondary-color); } /* Correct */
+        .score-details div:nth-child(5) p:last-child { color: var(--danger-color); } /* Incorrect */
 
 
         .result-question {
@@ -1488,6 +1514,7 @@
             <ul>
                 <li><span>The test consists of <strong>100 Multiple Choice Questions (MCQs)</strong> across various sections.</span></li>
                 <li><span>You have <strong>60 minutes (1 hour)</strong> to complete the test. The timer will start once you begin.</span></li>
+                <li><span>The passing score for this test is <strong>40 marks</strong>.</span></li>
                 <li><span>Each question has only <strong>one correct answer</strong>.</span></li>
                 <li><span>You can navigate between questions using the "Previous" and "Next" buttons, or by using the question palette at the bottom.</span></li>
                 <li><span>You can "Flag" questions for review and come back to them later.</span></li>
@@ -1511,7 +1538,7 @@
 
             <div class="test-body">
                 <p id="question-section" style="font-size: 1.1em; color: var(--primary-color); margin-bottom: 10px; font-weight: 600;"></p>
-                <p id="question-container"></p>
+                <div id="question-container"></div>
                 <div class="options-container" id="options-container">
                     </div>
             </div>
@@ -1540,7 +1567,7 @@
             <div id="result-summary">
                 <div class="score-circle">
                     <span id="final-score">0</span>
-                    <span>/ 100 Marks</span>
+                    <span id="total-marks-summary">/ 100 Marks</span>
                 </div>
                 <div class="score-details">
                     <div>
@@ -1550,6 +1577,11 @@
                     <div>
                         <p>Attempted Questions</p>
                         <p id="attempted-questions-summary">0</p>
+                    </div>
+                    <!-- Pass/Fail status box add kiya gaya hai -->
+                    <div>
+                        <p>Status</p>
+                        <p id="pass-fail-status" style="font-weight: 700;">-</p>
                     </div>
                     <div>
                         <p>Correct Answers</p>
@@ -2284,12 +2316,13 @@
     correctAnswer: 0
   }
 ];
-
+        
         // Global variables for quiz state
         let currentQuestionIndex = 0;
         let userAnswers = [];
         let flaggedQuestions = new Set();
         let timerInterval;
+        // Timer 60 minutes (seconds mein) set kiya gaya hai (UPDATED)
         const totalTime = 60 * 60; // 60 minutes in seconds
         let timeLeft = totalTime;
         const AUTO_SAVE_INTERVAL = 10 * 1000; // Auto-save every 10 seconds
@@ -2315,6 +2348,7 @@
         const questionPalette = document.getElementById('question-palette');
         const resultScreen = document.getElementById('result-screen');
         const finalScoreDisplay = document.getElementById('final-score');
+        const totalMarksSummary = document.getElementById('total-marks-summary');
         const totalQuestionsSummary = document.getElementById('total-questions-summary');
         const attemptedQuestionsSummary = document.getElementById('attempted-questions-summary');
         const correctAnswersSummary = document.getElementById('correct-answers-summary');
@@ -2396,6 +2430,18 @@
         function initializeQuiz() {
             // Always reset to a fresh state on initialization
             resetQuizState();
+            
+            // Update UI elements based on the actual quizData length
+            const totalQuestions = quizData.length;
+            // (HTML is already updated to 100, so this JS update is redundant but good for dynamicism)
+            document.querySelector('#instructions-screen ul li:first-child span').innerHTML = `The test consists of <strong>${totalQuestions} Multiple Choice Questions (MCQs)</strong> across various sections.`;
+            document.querySelector('#instructions-screen ul li:nth-child(2) span').innerHTML = `You have <strong>${totalTime / 60} minutes</strong> to complete the test. The timer will start once you begin.`;
+            document.querySelector('#instructions-screen ul li:nth-child(3) span').innerHTML = `The passing score for this test is <strong>40 marks</strong>.`; // Hardcoding 40 marks
+            
+            questionCounter.textContent = `Question: 1 / ${totalQuestions}`;
+            totalMarksSummary.textContent = `/ ${totalQuestions} Marks`;
+            totalQuestionsSummary.textContent = totalQuestions;
+
 
             renderQuestion();
             updatePalette();
@@ -2460,7 +2506,17 @@
         function renderQuestion() {
             const question = quizData[currentQuestionIndex];
             questionSectionDisplay.textContent = `Section: ${question.section}`; // Display section
-            questionContainer.innerHTML = `Q${currentQuestionIndex + 1}: ${question.question}`; // Use innerHTML for math equations
+            
+            // Start with the question text
+            let contentHTML = `Q${currentQuestionIndex + 1}: ${question.question}`;
+            
+            // Add visual if it exists
+            if (question.visual) {
+                contentHTML += `<div class="visual-container" style="display: flex; justify-content: center; margin: 20px 0;">${question.visual}</div>`;
+            }
+            
+            questionContainer.innerHTML = contentHTML; // Use innerHTML for <strong> and math
+            
             optionsContainer.innerHTML = ''; // Clear previous options
 
             // --- REMOVED: Reading passage display logic ---
@@ -2530,12 +2586,15 @@
 
         function updatePalette() {
             questionPalette.innerHTML = '';
+            let activeBtn = null; // To store the current question button
+
             quizData.forEach((_, index) => {
                 const paletteBtn = document.createElement('button');
                 paletteBtn.classList.add('palette-btn');
                 paletteBtn.textContent = index + 1;
                 if (index === currentQuestionIndex) {
                     paletteBtn.classList.add('current');
+                    activeBtn = paletteBtn; // Capture reference
                 }
                 if (userAnswers[index] !== null) {
                     paletteBtn.classList.add('answered');
@@ -2551,6 +2610,15 @@
                 });
                 questionPalette.appendChild(paletteBtn);
             });
+
+            // Scroll the palette to keep the current question button in view
+            if (activeBtn) {
+                activeBtn.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
         }
 
         function startTimer() {
@@ -2645,6 +2713,18 @@
             attemptedQuestionsSummary.textContent = results.attempted;
             correctAnswersSummary.textContent = results.correct;
             incorrectAnswersSummary.textContent = results.incorrect;
+            totalMarksSummary.textContent = `/ ${results.total} Marks`;
+
+            // Pass/Fail status ko calculate aur display karne ka logic
+            const passingMarks = 40; // UPDATED
+            const passFailStatus = document.getElementById('pass-fail-status');
+            if (results.correct >= passingMarks) {
+                passFailStatus.textContent = "Pass";
+                passFailStatus.style.color = "var(--secondary-color)"; // Green
+            } else {
+                passFailStatus.textContent = "Fail";
+                passFailStatus.style.color = "var(--danger-color)"; // Red
+            }
 
             // Clear quiz state from local storage after submission
             localStorage.removeItem('quizState');
@@ -2661,6 +2741,12 @@
 
                 const qText = document.createElement('p');
                 qText.innerHTML = `Q${index + 1}: ${question.question}`; // Use innerHTML for math equations
+                
+                // --- Add Visual in Review ---
+                if (question.visual) {
+                    qText.innerHTML += `<div class="visual-container" style="display: flex; justify-content: center; margin: 20px 0;">${question.visual}</div>`;
+                }
+                
                 qDiv.appendChild(qText);
 
                 question.options.forEach((option, optionIndex) => {
@@ -2840,7 +2926,9 @@
             reviewAnswersButton.classList.remove('hidden'); // Show review button again
             printResultButton.classList.remove('hidden'); // Show print button again
             passwordInput.value = ''; // Clear password field
-            initializeQuiz(); // Re-initialize all quiz state (will now always be fresh)
+            // initializeQuiz(); // Re-initialize all quiz state (will now always be fresh)
+            // No need to call initializeQuiz() here, it's handled by the 'beginTestButton'
+            resetQuizState(); // Just reset the state
             showToast('Test reset. Ready to retake!', 'info');
         });
 
@@ -3028,6 +3116,7 @@
             updateDisplay();
         }
 
+
         // --- Scratchpad Logic ---
         function saveScratchpadContent() {
             localStorage.setItem('scratchpadContent', scratchpadTextarea.value);
@@ -3037,6 +3126,8 @@
             const savedContent = localStorage.getItem('scratchpadContent');
             if (savedContent) {
                 scratchpadTextarea.value = savedContent;
+            } else {
+                scratchpadTextarea.value = ''; // Ensure it's empty if nothing is saved
             }
         }
 
@@ -3060,7 +3151,12 @@
         function makeDraggable(element, header) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-            header.onmousedown = dragMouseDown;
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            } else {
+                element.onmousedown = dragMouseDown;
+            }
+
 
             function dragMouseDown(e) {
                 e = e || window.event;
@@ -3105,34 +3201,21 @@
 
         // Initialize quiz on page load
         document.addEventListener('DOMContentLoaded', () => {
-            initializeQuiz(); // Load quiz state on DOMContentLoaded (will now always be fresh)
+            // No need to call initializeQuiz() here, it's handled by the 'beginTestButton'
+            // We just set the default state
+            resetQuizState();
         });
 
         // Save quiz state before the user leaves or reloads the page
         window.addEventListener('beforeunload', () => {
-            saveQuizState();
-            saveScratchpadContent();
+            // Only save if the test screen is visible
+            if (!testScreen.classList.contains('hidden')) {
+                saveQuizState();
+                saveScratchpadContent();
+            }
         });
 
-        // Load MathJax library for rendering LaTeX equations
-        // This script will load the MathJax library from a CDN.
-        // It's configured to process LaTeX math within '$...$' for inline and '$$...$$' for display.
-        const mathJaxScript = document.createElement('script');
-        mathJaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-        mathJaxScript.async = true;
-        document.head.appendChild(mathJaxScript);
-
-        // Configure MathJax
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-
+        // (Removed the duplicate MathJax script loading from the end)
     </script>
 </body>
 </html>
