@@ -540,6 +540,490 @@
         .animate-fade-in.active {
             animation: fadeIn 0.8s ease-out forwards;
         }
+
+        /* --- Special Offer Popup (Premium) --- */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-card {
+            background: rgba(255, 255, 255, 0.95);
+            width: 90%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: visible;
+        }
+
+        [data-theme="dark"] .popup-card {
+            background: rgba(30, 41, 59, 0.95);
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.3),
+                0 10px 10px -5px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .popup-overlay.active .popup-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            color: var(--text-muted-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1.2rem;
+        }
+
+        [data-theme="dark"] .popup-close {
+            background: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+        }
+
+        .popup-close:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .popup-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ef4444, #f59e0b);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .popup-logo-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        [data-theme="dark"] .popup-logo-container {
+            background: #0f172a;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-logo-svg {
+            width: 50px;
+            height: 50px;
+            color: #10a37f;
+            /* OpenAI Green */
+        }
+
+        .popup-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .popup-text {
+            color: var(--text-muted-light);
+            margin-bottom: 28px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+
+        [data-theme="dark"] .popup-text {
+            color: #94a3b8;
+        }
+
+        .popup-price-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .popup-price-text {
+            color: #059669;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        [data-theme="dark"] .popup-price-text {
+            color: #34d399;
+        }
+
+        .popup-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #10a37f 0%, #0d9488 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .popup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3), 0 4px 6px -2px rgba(16, 185, 129, 0.1);
+            filter: brightness(1.05);
+        }
+
+        .popup-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .popup-btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        .popup-footer-note {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 16px;
+        }
+
+        /* --- Enhanced Popup Styles (Overrides) --- */
+        .popup-card {
+            background: rgba(255, 255, 255, 0.9) !important;
+            transform: scale(0.8) translateY(30px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+            overflow: hidden !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+        }
+
+        .popup-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #10a37f, #3b82f6, #f59e0b);
+            background-size: 200% 100%;
+            animation: gradient-pan 3s linear infinite;
+            z-index: 5;
+        }
+
+        .popup-overlay.active .popup-card {
+            transform: scale(1) translateY(0) !important;
+        }
+
+        .popup-badge {
+            top: 20px !important;
+            right: 20px !important;
+            left: auto !important;
+            transform: none !important;
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            letter-spacing: 0.5px !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+            animation: pulse-badge 2s infinite !important;
+        }
+
+        .popup-logo-container {
+            width: 90px !important;
+            height: 90px !important;
+            margin-bottom: 24px !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+            animation: float-logo 3s ease-in-out infinite;
+        }
+
+        @keyframes float-logo {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .popup-logo-svg {
+            width: 56px !important;
+            height: 56px !important;
+            filter: drop-shadow(0 4px 6px rgba(16, 163, 127, 0.2));
+        }
+
+        .popup-btn {
+            background: linear-gradient(135deg, #10a37f 0%, #059669 100%) !important;
+            font-weight: 700 !important;
+            font-size: 1.15rem !important;
+            padding: 16px 32px !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .popup-btn:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.5) !important;
+            filter: brightness(1.1) !important;
+        }
+
+        .popup-btn::after {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%) !important;
+            transform: skewX(-25deg) !important;
+            animation: shimmer 3s infinite;
+            width: 50% !important;
+            left: -100% !important;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
+        }
+
+        [data-theme="dark"] .popup-card {
+            background: rgba(30, 41, 59, 0.85) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Fix for badge overlap */
+        .popup-badge {
+            left: 20px !important;
+            right: auto !important;
+        }
+
+        /* --- Features Section --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon-box {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.75rem;
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .feature-card:hover .feature-icon-box {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color-light);
+        }
+
+        [data-theme="dark"] .feature-title {
+            color: white;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted-light);
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .feature-desc {
+            color: #94a3b8;
+        }
+
+        /* --- Testimonials Section --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] .testimonial-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-icon {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            opacity: 0.2;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-color-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .testimonial-text {
+            color: #cbd5e1;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .student-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .student-info h4 {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-color-light);
+            margin: 0;
+        }
+
+        [data-theme="dark"] .student-info h4 {
+            color: white;
+        }
+
+        .student-info span {
+            font-size: 0.85rem;
+            color: var(--text-muted-light);
+        }
     </style>
 </head>
 
@@ -590,14 +1074,52 @@
                     <p class="text-base mt-1 notice-content-text text-gray-700 dark:text-gray-300">
                         All mock tests are <b>password protected</b> for quality assurance. For access credentials,
                         please contact us on WhatsApp:
-                        <a href="https://wa.me/923480358640" target="_blank" class="font-semibold underline"
-                            style="color: var(--success-color); hover:text-green-700">
+                        <a href="https://wa.me/923480358640" target="_blank"
+                            class="font-semibold underline hover:text-green-700" style="color: var(--success-color);">
                             +92 348 0358640
                         </a>
                     </p>
                 </div>
             </div>
         </div>
+
+        <!-- Section: Features -->
+        <section class="mb-16 animate-fade-in" data-delay="250">
+            <h2 class="section-title text-3xl sm:text-4xl text-center mb-10">
+                Why Choose Our Platform?
+            </h2>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Real-Time Simulation</h3>
+                    <p class="feature-desc">Experience the exact exam environment with our timed tests designed to mimic
+                        the actual paper pattern.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Detailed Analytics</h3>
+                    <p class="feature-desc">Get instant results and comprehensive performance analysis to identify your
+                        strengths and weaknesses.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="feature-title">Expert Support</h3>
+                    <p class="feature-desc">Access to premium study materials and direct mentorship via WhatsApp to
+                        guide you to success.</p>
+                </div>
+            </div>
+        </section>
 
         <!-- Section 1: Mock Tests -->
         <section class="mb-16">
@@ -703,6 +1225,58 @@
             </div>
         </section>
 
+        </section>
+
+        <!-- Section 3: Testimonials -->
+        <section class="mb-16 animate-fade-in" data-delay="600">
+            <h2 class="section-title text-3xl sm:text-4xl text-center mb-10">
+                Student Success Stories
+            </h2>
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">"The mock tests were incredibly accurate. I felt so confident during the
+                        actual exam because the pattern was exactly the same!"</p>
+                    <div class="student-profile">
+                        <div class="student-avatar">AS</div>
+                        <div class="student-info">
+                            <h4>Ahmed Shah</h4>
+                            <span>Scored 85/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">"I was struggling with time management, but the timed practice tests
+                        helped me improve my speed significantly. Highly recommended!"</p>
+                    <div class="student-profile">
+                        <div class="student-avatar">FK</div>
+                        <div class="student-info">
+                            <h4>Fatima Khan</h4>
+                            <span>Scored 92/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">"The detailed analytics showed me exactly where I was losing marks. The
+                        study material provided was also top-notch."</p>
+                    <div class="student-profile">
+                        <div class="student-avatar">MR</div>
+                        <div class="student-info">
+                            <h4>Muhammad Raza</h4>
+                            <span>Scored 88/100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -727,6 +1301,47 @@
             </div>
         </div>
     </footer>
+
+    <!-- Special Offer Popup -->
+    <div class="popup-overlay" id="offerPopup">
+        <div class="popup-card">
+            <div class="popup-badge">Limited Time Offer</div>
+            <button class="popup-close" id="closePopup">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="popup-logo-container">
+                <!-- ChatGPT Logo SVG -->
+                <svg class="popup-logo-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1195 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.453l-.142.0805L8.704 5.4596a.7948.7948 0 0 0-.3927.6813zm1.0916-2.3229L12 8.5302l2.602 1.5099v3.0137l-2.602 1.5099-2.602-1.5099z" />
+                </svg>
+            </div>
+
+            <h2 class="popup-title">
+                ChatGPT Go Plan
+                <span
+                    style="display:block; font-size: 1.1rem; color: var(--text-muted-light); font-weight: 500; margin-top: 4px;">1
+                    Year Premium Access</span>
+            </h2>
+
+            <div class="popup-price-box">
+                <span class="popup-price-text">Special Discounted Price</span>
+            </div>
+
+            <p class="popup-text">
+                Unlock the full power of AI with GPT-5, faster response times, and priority access. Get your 1-year
+                subscription now at an unbeatable price!
+            </p>
+
+            <a href="https://wa.me/923480358640?text=Hi,%20I%20want%20ChatGPT%20Go%201%20Year%20Plan,%20please%20share%20details"
+                target="_blank" class="popup-btn">
+                <i class="fab fa-whatsapp mr-2" style="font-size: 1.3rem;"></i> Get It Now
+            </a>
+
+            <p class="popup-footer-note">Limited slots available. First come, first served.</p>
+        </div>
+    </div>
 
     <!-- JavaScript for Theme Toggle and Animations -->
     <script>
@@ -822,6 +1437,35 @@
             }
             observer.observe(el);
         });
+        // --- Special Offer Popup Logic ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const popup = document.getElementById('offerPopup');
+                if (popup) {
+                    popup.classList.add('active');
+                    setTimeout(() => {
+                        popup.classList.remove('active');
+                    }, 15000);
+                }
+            }, 1000);
+        });
+
+        const closePopupBtn = document.getElementById('closePopup');
+        const offerPopup = document.getElementById('offerPopup');
+
+        if (closePopupBtn) {
+            closePopupBtn.addEventListener('click', () => {
+                offerPopup.classList.remove('active');
+            });
+        }
+
+        if (offerPopup) {
+            offerPopup.addEventListener('click', (e) => {
+                if (e.target === offerPopup) {
+                    offerPopup.classList.remove('active');
+                }
+            });
+        }
     </script>
 </body>
 
